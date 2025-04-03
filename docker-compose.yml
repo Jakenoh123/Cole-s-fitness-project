@@ -1,0 +1,34 @@
+version: "2"
+services:
+  cole_fitness_be:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    image: colefitness_be
+    container_name: colefitness_be
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: [python, main.py]
+    depends_on:
+      - cole_fitness_db
+
+  cole_fitness_db:
+    image: postgres:latest
+    container_name: colefitness_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: colefitness_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - PostgresData:/var/lib/postgresql/data
+
+volumes:
+  PostgresData:
+    driver: local #default storage driver
+
